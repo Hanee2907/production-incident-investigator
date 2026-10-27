@@ -1,0 +1,82 @@
+2026-10-26 08:00:01.112 INFO  [api-gateway] c.s.gateway.Startup - Gateway started on port 8443
+2026-10-26 08:00:02.540 INFO  [order-service] c.s.order.Startup - Order service ready, 12 workers
+2026-10-26 08:00:03.017 INFO  [payment-service] c.s.payment.Startup - Payment service ready, provider=stripe-proxy
+2026-10-26 08:00:03.950 INFO  [inventory-service] c.s.inventory.Startup - Connected to inventory DB pool size=10
+2026-10-26 08:00:04.201 INFO  [auth-service] c.s.auth.Startup - JWKS keys loaded (3 keys)
+2026-10-26 08:00:04.880 INFO  [notification-service] c.s.notify.Startup - SMTP relay configured smtp.internal:587
+2026-10-26 08:12:44.301 INFO  [order-service] c.s.order.OrderController - Created order 100231 for customer 5512
+2026-10-26 08:13:10.002 WARN  [payment-service] c.s.payment.GatewayClient - Slow response from provider: 2400 ms
+2026-10-26 08:14:55.731 ERROR [payment-service] c.s.payment.GatewayClient - Payment authorization failed for order 100231 after 3000 ms
+java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:288)
+	at com.shop.payment.GatewayClient.authorize(GatewayClient.java:87)
+	at com.shop.payment.PaymentService.charge(PaymentService.java:54)
+2026-10-26 08:14:55.902 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100231: payment step returned 504
+2026-10-26 08:21:03.420 ERROR [payment-service] c.s.payment.GatewayClient - Payment authorization failed for order 100244 after 3000 ms
+java.net.SocketTimeoutException: Read timed out
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:288)
+	at com.shop.payment.GatewayClient.authorize(GatewayClient.java:87)
+2026-10-26 08:21:03.611 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100244: payment step returned 504
+2026-10-26 08:29:47.088 ERROR [payment-service] c.s.payment.GatewayClient - Payment authorization failed for order 100259 after 3000 ms
+java.net.SocketTimeoutException: Read timed out
+	at com.shop.payment.GatewayClient.authorize(GatewayClient.java:87)
+2026-10-26 08:29:47.230 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100259: payment step returned 504
+2026-10-26 08:40:12.555 INFO  [order-service] c.s.order.OrderController - Created order 100270 for customer 7731
+2026-10-26 09:02:18.004 WARN  [inventory-service] c.s.inventory.StockRepository - Connection pool 9/10 in use
+2026-10-26 09:05:31.776 ERROR [inventory-service] c.s.inventory.StockRepository - Failed to reserve stock for SKU 'SKU-88213'
+org.springframework.dao.DataAccessResourceFailureException: Unable to acquire JDBC Connection
+	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:277)
+	at com.shop.inventory.StockRepository.reserve(StockRepository.java:41)
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:696)
+	... 14 more
+2026-10-26 09:05:32.010 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100281: inventory step returned 503
+2026-10-26 09:07:02.331 ERROR [inventory-service] c.s.inventory.StockRepository - Failed to reserve stock for SKU 'SKU-10007'
+org.springframework.dao.DataAccessResourceFailureException: Unable to acquire JDBC Connection
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+	at com.zaxxer.hikari.pool.HikariPool.createTimeoutException(HikariPool.java:696)
+2026-10-26 09:09:45.900 ERROR [inventory-service] c.s.inventory.StockRepository - Failed to reserve stock for SKU 'SKU-44120'
+org.springframework.dao.DataAccessResourceFailureException: Unable to acquire JDBC Connection
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+2026-10-26 09:10:03.145 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100290: inventory step returned 503
+2026-10-26 09:15:20.420 ERROR [payment-service] c.s.payment.GatewayClient - Payment authorization failed for order 100301 after 3000 ms
+java.net.SocketTimeoutException: Read timed out
+	at com.shop.payment.GatewayClient.authorize(GatewayClient.java:87)
+2026-10-26 09:31:08.716 ERROR [auth-service] c.s.auth.TokenFilter - Token validation crashed for user 8812
+java.lang.NullPointerException: Cannot invoke "String.split(String)" because "header" is null
+	at com.shop.auth.TokenFilter.extractBearer(TokenFilter.java:63)
+	at com.shop.auth.TokenFilter.doFilterInternal(TokenFilter.java:38)
+2026-10-26 09:31:09.002 WARN  [api-gateway] c.s.gateway.Proxy - Upstream auth-service returned 500 for GET /api/orders
+2026-10-26 09:44:51.230 ERROR [auth-service] c.s.auth.TokenFilter - Token validation crashed for user 9034
+java.lang.NullPointerException: Cannot invoke "String.split(String)" because "header" is null
+	at com.shop.auth.TokenFilter.extractBearer(TokenFilter.java:63)
+2026-10-26 10:02:00.004 INFO  [inventory-service] c.s.inventory.Ops - Pool size raised to 25 by on-call
+2026-10-26 10:20:33.818 ERROR [notification-service] c.s.notify.Mailer - Could not send order confirmation to anna.k@example.com
+jakarta.mail.MessagingException: Could not connect to SMTP host: smtp.internal, port: 587
+	at com.shop.notify.Mailer.send(Mailer.java:52)
+2026-10-26 10:48:12.090 ERROR [payment-service] c.s.payment.GatewayClient - Payment authorization failed for order 100377 after 3000 ms
+java.net.SocketTimeoutException: Read timed out
+	at com.shop.payment.GatewayClient.authorize(GatewayClient.java:87)
+2026-10-26 10:48:12.300 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100377: payment step returned 504
+2026-10-26 11:30:45.001 INFO  [order-service] c.s.order.OrderController - Created order 100402 for customer 1209
+2026-10-26 13:15:09.554 ERROR [auth-service] c.s.auth.TokenFilter - Token validation crashed for user 1177
+java.lang.NullPointerException: Cannot invoke "String.split(String)" because "header" is null
+	at com.shop.auth.TokenFilter.extractBearer(TokenFilter.java:63)
+2026-10-26 14:02:41.212 ERROR [payment-service] c.s.payment.GatewayClient - Payment authorization failed for order 100455 after 3000 ms
+java.net.SocketTimeoutException: Read timed out
+	at com.shop.payment.GatewayClient.authorize(GatewayClient.java:87)
+2026-10-26 14:02:41.400 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100455: payment step returned 504
+2026-10-26 15:47:30.775 ERROR [notification-service] c.s.notify.Mailer - Could not send order confirmation to raj.p@example.com
+jakarta.mail.MessagingException: Could not connect to SMTP host: smtp.internal, port: 587
+	at com.shop.notify.Mailer.send(Mailer.java:52)
+2026-10-26 18:03:12.880 WARN  [order-service] c.s.order.ReportJob - Nightly export took 412 s
+2026-10-26 23:58:59.001 FATAL [order-service] c.s.order.ReportJob - Worker crashed while building export batch 7
+java.lang.OutOfMemoryError: Java heap space
+	at java.base/java.util.Arrays.copyOf(Arrays.java:3537)
+	at com.shop.order.ReportJob.buildBatch(ReportJob.java:118)
+2026-10-27 00:00:30.442 INFO  [order-service] c.s.order.Startup - Order service ready, 12 workers
+this line is not a log event and will be counted as skipped
+2026-10-27 01:12:08.330 ERROR [inventory-service] c.s.inventory.StockRepository - Failed to reserve stock for SKU 'SKU-77002'
+org.springframework.dao.DataAccessResourceFailureException: Unable to acquire JDBC Connection
+Caused by: java.sql.SQLTransientConnectionException: HikariPool-1 - Connection is not available, request timed out after 30000ms.
+2026-10-27 01:12:08.501 ERROR [order-service] c.s.order.CheckoutFlow - Checkout failed for order 100611: inventory step returned 503

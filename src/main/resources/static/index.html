@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Incident Investigator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+    <h1>Incident Investigator</h1>
+    <nav>
+        <button data-tab="overview" class="active">Overview</button>
+        <button data-tab="groups">Error groups</button>
+        <button data-tab="incidents">Incidents</button>
+        <button data-tab="logs">Logs</button>
+        <button data-tab="ingest">Ingest logs</button>
+    </nav>
+</header>
+
+<main>
+    <section id="overview" class="tab active">
+        <div class="toolbar">
+            <span id="window" class="muted"></span>
+            <a class="btn" href="/api/reports/summary.md">Download summary report (.md)</a>
+        </div>
+        <div id="kpis" class="kpis"></div>
+        <div class="grid2">
+            <div class="card"><h2>Affected services</h2><p class="muted">When errors began, per service</p><div id="impact"></div></div>
+            <div class="card"><h2>Active incidents</h2><div id="active"></div></div>
+        </div>
+        <div class="card"><h2>Top recurring failures</h2><div id="top"></div></div>
+    </section>
+
+    <section id="groups" class="tab">
+        <div class="toolbar">
+            <select id="g-service"><option value="">All services</option></select>
+            <label><input type="checkbox" id="g-recurring"> Recurring only</label>
+        </div>
+        <div id="group-list"></div>
+    </section>
+
+    <section id="incidents" class="tab">
+        <div class="toolbar">
+            <input id="i-q" type="search" placeholder="Search title, notes, history…">
+            <select id="i-status"><option value="">Any status</option></select>
+            <select id="i-severity"><option value="">Any severity</option></select>
+            <select id="i-service"><option value="">All services</option></select>
+            <button id="i-search" class="btn">Search</button>
+            <button id="i-new" class="btn secondary">New incident</button>
+        </div>
+        <div id="incident-list"></div>
+    </section>
+
+    <section id="logs" class="tab">
+        <div class="toolbar">
+            <input id="l-q" type="search" placeholder="Search message or exception…">
+            <select id="l-service"><option value="">All services</option></select>
+            <select id="l-level">
+                <option value="">Any level</option><option>DEBUG</option><option>INFO</option>
+                <option>WARN</option><option selected>ERROR</option><option>FATAL</option>
+            </select>
+            <button id="l-search" class="btn">Search</button>
+        </div>
+        <div id="log-list"></div>
+    </section>
+
+    <section id="ingest" class="tab">
+        <div class="card">
+            <h2>Upload a log file</h2>
+            <p class="muted">Plain text (<code>2026-10-27 08:15:02 ERROR [service] logger - message</code>, stack traces included) or JSON lines.</p>
+            <input type="file" id="file">
+            <button id="upload" class="btn">Upload &amp; analyse</button>
+        </div>
+        <div class="card">
+            <h2>…or paste log lines</h2>
+            <textarea id="paste" rows="10" placeholder="Paste log lines here"></textarea>
+            <button id="paste-go" class="btn">Analyse</button>
+        </div>
+        <pre id="ingest-result" class="result"></pre>
+    </section>
+</main>
+
+<dialog id="drawer"><div id="drawer-body"></div></dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
